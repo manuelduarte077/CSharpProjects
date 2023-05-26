@@ -1,7 +1,10 @@
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
 
-const Layout = ({ children }) => {
-  return <Stack>{children}</Stack>;
+export const unstable_settings = {
+  // Ensure any route can link back to `/`
+  initialRouteName: "index",
 };
 
-export default Layout;
+export default function HomeLayout() {
+  return <Slot />;
+}
