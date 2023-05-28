@@ -1,4 +1,4 @@
-import { Slot } from "expo-router";
+import { Stack } from "expo-router";
 
 export const unstable_settings = {
   // Ensure any route can link back to `/`
@@ -6,5 +6,5 @@ export const unstable_settings = {
 };
 
 export default function HomeLayout() {
-  return <Slot />;
+  return <Stack />;
 }
