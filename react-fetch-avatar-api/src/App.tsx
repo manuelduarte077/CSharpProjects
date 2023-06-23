@@ -26,7 +26,6 @@ export default function App() {
       });
 
       const jsonData = await data.json();
-
       setData(jsonData);
 
     };
@@ -36,22 +35,32 @@ export default function App() {
   }, [])
 
   return (
-    <h1 className="text-3xl font-bold underline">
-      {
-        data.map((item) => {
-          return (
-            <div key={item.id}>
-              <h1>{item.name}</h1>
-              <img src={item.image} alt={item.name} />
-              <p>{item.bio.alternativeNames}</p>
-              <p>{item.bio.nationality}</p>
-              <p>{item.bio.ethnicity}</p>
 
-            </div>
-          )
-        })
-      }
-    </h1>
+    <div className="p-10">
+      <div className="max-w-xl rounded overflow-hidden shadow-lg">
+        {
+          data.map((item) => {
+            return (
+              <div key={item.id}>
+                <img className="w-full" src={item.image} alt={item.name} />
+                <div className="px-6 py-4">
+                  <div className="font-bold text-xl mb-2">{item.name}</div>
+                  <p className="text-gray-700 text-base">
+                    {item.bio.alternativeNames}                  </p>
+                </div>
+                <div className="px-6 pt-4 pb-2">
+                  <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{item.bio.nationality}</span>
+                  <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{item.bio.ethnicity}</span>
+                  <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{item.bio.born}</span>
+                </div>
+              </div>
+            )
+          })
+        }
+      </div>
+    </div>
+
   )
 }
+
 
