@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   SafeAreaView,
 } from 'react-native'
+import { PokemonCard } from './src/components/PokemonCard'
 
 interface Pokemon {
   name: string
@@ -14,7 +15,7 @@ interface Pokemon {
 }
 
 export default function App() {
-  const [pokemon, setPokemon] = useState([])
+  const [pokemon, setPokemon] = useState<Pokemon[]>([])
   const [next, setNext] = useState('')
 
   const [isLoadingMore, setLoadingMore] = useState(false)
@@ -48,7 +49,7 @@ export default function App() {
       <FlatList
         data={pokemon}
         keyExtractor={(item) => item.name}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
+        renderItem={({ item }) => <PokemonCard url={item.url} />}
         onEndReached={loadMore}
         ListFooterComponent={() =>
           isLoadingMore ? <ActivityIndicator /> : null
@@ -62,7 +63,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 })
