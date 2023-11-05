@@ -1,6 +1,6 @@
-import React from 'react';
-import { View } from 'react-native';
-import { MyButton } from './Button';
+import React from 'react'
+import { View } from 'react-native'
+import { MyButton } from './Button'
 
 const MyButtonMeta = {
   title: 'MyButton',
@@ -18,14 +18,14 @@ const MyButtonMeta = {
       </View>
     ),
   ],
-};
+}
 
-export default MyButtonMeta;
+export default MyButtonMeta
 
-export const Basic = {};
+export const Basic = {}
 
 export const AnotherExample = {
   args: {
     text: 'Another example',
   },
-};
+}
