@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import {useEffect, useState} from 'react'
 import {
   FlatList,
   StyleSheet,
@@ -40,17 +40,17 @@ const ProductListScreen = () => {
   return (
     <View>
       {isLoading ? (
-        <ActivityIndicator color="red" size="large" />
+        <ActivityIndicator color="red" size="large"/>
       ) : erorr ? (
         <Text style={styles.errorStyle}>{erorr}</Text>
       ) : (
         <FlatList
           showsVerticalScrollIndicator={false}
           data={products}
-          renderItem={({ item }) => (
+          renderItem={({item}) => (
             <View style={styles.cardContainer}>
-              <Image source={{ uri: item.image }} style={styles.image} />
-              <Text style={{ fontSize: 18, textAlign: 'center' }}>
+              <Image source={{uri: item.image}} style={styles.image}/>
+              <Text style={{fontSize: 18, textAlign: 'center'}}>
                 {item.price}
               </Text>
             </View>
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 4,
     marginTop: 20,
