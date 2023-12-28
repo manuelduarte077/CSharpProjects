@@ -7,6 +7,8 @@ function App() {
 
       {/* BasicTypes */}
       <BasicTypes />
+
+      {/*  */}
     </main>
   )
 }
