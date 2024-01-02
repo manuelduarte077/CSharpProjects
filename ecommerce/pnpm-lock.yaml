@@ -18,8 +18,8 @@ dependencies:
     specifier: 18.2.0
     version: 18.2.0
   react-native:
-    specifier: 0.72.5
-    version: 0.72.5(@babel/core@7.22.8)(@babel/preset-env@7.22.7)(react@18.2.0)
+    specifier: 0.72.6
+    version: 0.72.6(@babel/core@7.22.8)(@babel/preset-env@7.22.7)(react@18.2.0)
   tailwindcss:
     specifier: 3.3.2
     version: 3.3.2
@@ -1911,7 +1911,7 @@ packages:
     resolution: {integrity: sha512-d77/1BbNLbJDBV6tH7ctYpau+3tnU5YMhg36uGabW4VDrl1Arp6E0jDRioHFoFqIbm+BXMVbyQc9MpfKo6OIQQ==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@jest/types': 29.6.1
+      '@jest/types': 29.6.3
     dev: false
 
   /@jest/environment@29.6.1:
@@ -1919,7 +1919,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@jest/fake-timers': 29.6.1
-      '@jest/types': 29.6.1
+      '@jest/types': 29.6.3
       '@types/node': 20.4.1
       jest-mock: 29.6.1
     dev: false
@@ -1928,19 +1928,12 @@ packages:
     resolution: {integrity: sha512-RdgHgbXyosCDMVYmj7lLpUwXA4c69vcNzhrt69dJJdf8azUrpRh3ckFCaTPNjsEeRi27Cig0oKDGxy5j7hOgHg==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@jest/types': 29.6.1
+      '@jest/types': 29.6.3
       '@sinonjs/fake-timers': 10.3.0
       '@types/node': 20.4.1
       jest-message-util: 29.6.1
       jest-mock: 29.6.1
       jest-util: 29.6.1
-    dev: false
-
-  /@jest/schemas@29.6.0:
-    resolution: {integrity: sha512-rxLjXyJBTL4LQeJW3aKo0M/+GkCOXsO+8i9Iu7eDb6KwtP65ayoDsitrdPBtujxQ88k4wI2FNYfa6TOGwSn6cQ==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    dependencies:
-      '@sinclair/typebox': 0.27.8
     dev: false
 
   /@jest/schemas@29.6.3:
@@ -1969,18 +1962,6 @@ packages:
       '@types/istanbul-reports': 3.0.1
       '@types/node': 20.4.1
       '@types/yargs': 16.0.5
-      chalk: 4.1.2
-    dev: false
-
-  /@jest/types@29.6.1:
-    resolution: {integrity: sha512-tPKQNMPuXgvdOn2/Lg9HNfUvjYVGolt04Hp03f5hAk878uwOLikN+JzeLY0HcVgKgFl9Hs3EIqpu3WX27XNhnw==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    dependencies:
-      '@jest/schemas': 29.6.0
-      '@types/istanbul-lib-coverage': 2.0.4
-      '@types/istanbul-reports': 3.0.1
-      '@types/node': 20.4.1
-      '@types/yargs': 17.0.24
       chalk: 4.1.2
     dev: false
 
@@ -2296,14 +2277,14 @@ packages:
     resolution: {integrity: sha512-285lfdqSXaqKuBbbtP9qL2tDrfxdOFtIMvkKadtleRQkdOxx+uzGvFr82KHmc/sSiMtfXGp7JnFYWVh4sFl7Yw==}
     dev: false
 
-  /@react-native/virtualized-lists@0.72.8(react-native@0.72.5):
+  /@react-native/virtualized-lists@0.72.8(react-native@0.72.6):
     resolution: {integrity: sha512-J3Q4Bkuo99k7mu+jPS9gSUSgq+lLRSI/+ahXNwV92XgJ/8UgOTxu2LPwhJnBk/sQKxq7E8WkZBnBiozukQMqrw==}
     peerDependencies:
       react-native: '*'
     dependencies:
       invariant: 2.2.4
       nullthrows: 1.1.1
-      react-native: 0.72.5(@babel/core@7.22.8)(@babel/preset-env@7.22.7)(react@18.2.0)
+      react-native: 0.72.6(@babel/core@7.22.8)(@babel/preset-env@7.22.7)(react@18.2.0)
     dev: false
 
   /@segment/loosely-validate-event@2.0.0:
@@ -4306,7 +4287,7 @@ packages:
     dependencies:
       '@jest/environment': 29.6.1
       '@jest/fake-timers': 29.6.1
-      '@jest/types': 29.6.1
+      '@jest/types': 29.6.3
       '@types/node': 20.4.1
       jest-mock: 29.6.1
       jest-util: 29.6.1
@@ -4322,12 +4303,12 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@babel/code-frame': 7.22.5
-      '@jest/types': 29.6.1
+      '@jest/types': 29.6.3
       '@types/stack-utils': 2.0.1
       chalk: 4.1.2
       graceful-fs: 4.2.11
       micromatch: 4.0.5
-      pretty-format: 29.6.1
+      pretty-format: 29.7.0
       slash: 3.0.0
       stack-utils: 2.0.6
     dev: false
@@ -4336,7 +4317,7 @@ packages:
     resolution: {integrity: sha512-brovyV9HBkjXAEdRooaTQK42n8usKoSRR3gihzUpYeV/vwqgSoNfrksO7UfSACnPmxasO/8TmHM3w9Hp3G1dgw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@jest/types': 29.6.1
+      '@jest/types': 29.6.3
       '@types/node': 20.4.1
       jest-util: 29.6.1
     dev: false
@@ -4362,7 +4343,7 @@ packages:
     resolution: {integrity: sha512-NRFCcjc+/uO3ijUVyNOQJluf8PtGCe/W6cix36+M3cTFgiYqFOOW5MgN4JOOcvbUhcKTYVd1CvHz/LWi8d16Mg==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@jest/types': 29.6.1
+      '@jest/types': 29.6.3
       '@types/node': 20.4.1
       chalk: 4.1.2
       ci-info: 3.8.0
@@ -5763,15 +5744,6 @@ packages:
       react-is: 17.0.2
     dev: false
 
-  /pretty-format@29.6.1:
-    resolution: {integrity: sha512-7jRj+yXO0W7e4/tSJKoR7HRIHLPPjtNaUGG2xxKQnGvPNRkgWcQ0AZX6P4KBRJN4FcTBWb3sa7DVUJmocYuoog==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    dependencies:
-      '@jest/schemas': 29.6.0
-      ansi-styles: 5.2.0
-      react-is: 18.2.0
-    dev: false
-
   /pretty-format@29.7.0:
     resolution: {integrity: sha512-Pdlw/oPxN+aXdmM9R00JVC9WVFoCLTKJvDVLgmJ+qAffBMxsV85l/Lu7sNx4zSzPyoL2euImuEwHhOXdEgNFZQ==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -5907,8 +5879,8 @@ packages:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
     dev: false
 
-  /react-native@0.72.5(@babel/core@7.22.8)(@babel/preset-env@7.22.7)(react@18.2.0):
-    resolution: {integrity: sha512-oIewslu5DBwOmo7x5rdzZlZXCqDIna0R4dUwVpfmVteORYLr4yaZo5wQnMeR+H7x54GaMhmgeqp0ZpULtulJFg==}
+  /react-native@0.72.6(@babel/core@7.22.8)(@babel/preset-env@7.22.7)(react@18.2.0):
+    resolution: {integrity: sha512-RafPY2gM7mcrFySS8TL8x+TIO3q7oAlHpzEmC7Im6pmXni6n1AuufGaVh0Narbr1daxstw7yW7T9BKW5dpVc2A==}
     engines: {node: '>=16'}
     hasBin: true
     peerDependencies:
@@ -5923,7 +5895,7 @@ packages:
       '@react-native/gradle-plugin': 0.72.11
       '@react-native/js-polyfills': 0.72.1
       '@react-native/normalize-colors': 0.72.0
-      '@react-native/virtualized-lists': 0.72.8(react-native@0.72.5)
+      '@react-native/virtualized-lists': 0.72.8(react-native@0.72.6)
       abort-controller: 3.0.0
       anser: 1.4.10
       base64-js: 1.5.1

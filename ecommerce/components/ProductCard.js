@@ -55,7 +55,7 @@ export default function ProductCard({
           {description}
         </Text>
         <TouchableOpacity className="flex-row justify-center rounded-full bg-black/90 dark:bg-white/90 p-3 w-10/12 self-center mt-5">
-          <Text className="text-white dark:text-black font-bold">
+          <Text className="text-white dark:text-black font-bold text-lg">
             Add To Cart
           </Text>
         </TouchableOpacity>
