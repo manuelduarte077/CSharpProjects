@@ -49,6 +49,12 @@ export default function CharacterList() {
         <Text style={styles.errorStyle}>{error}</Text>
       ) : (
         <FlatList
+          keyExtractor={(item) => item.name}
+          ListEmptyComponent={
+            <Text style={{ fontSize: 18, textAlign: 'center' }}>
+              No Characters Found
+            </Text>
+          }
           showsVerticalScrollIndicator={false}
           data={character}
           renderItem={({ item }) => (
