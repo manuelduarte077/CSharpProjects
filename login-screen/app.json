@@ -1,16 +1,25 @@
 {
   "expo": {
-    "name": "fake-store-api",
-    "slug": "fake-store-api",
+    "name": "login-screen",
+    "slug": "login-screen",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": "node_modules/@expo-google-fonts/red-hat-display/RedHatDisplay[400,500,700].ttf"
+        }
+      ]
+    ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    
     "assetBundlePatterns": [
       "**/*"
     ],
