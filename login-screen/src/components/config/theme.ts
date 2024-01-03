@@ -9,6 +9,7 @@ const colors = {
 const fontSize = {
   title: 36,
   content: 16,
+  caption: 14,
 }
 const roundness = {
   default: 8,
