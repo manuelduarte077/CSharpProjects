@@ -1,16 +1,18 @@
 import React from 'react'
+import { View, Text, SafeAreaView, StyleSheet } from 'react-native'
 
-import { View, Text, SafeAreaView, StyleSheet, Button } from 'react-native'
 import {
   RedHatDisplay_400Regular,
   RedHatDisplay_500Medium,
+  RedHatDisplay_600SemiBold,
   RedHatDisplay_700Bold,
   useFonts,
 } from '@expo-google-fonts/red-hat-display'
-
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
 import { theme } from '../components/config/theme'
 import { TextInput } from '../components/TextInput/TextInput'
+import { Button } from '../components/Button/Button'
 
 export default function LoginScreen() {
   /// SafeArea
@@ -20,6 +22,7 @@ export default function LoginScreen() {
   let [fontsLoaded, fontError] = useFonts({
     RedHatDisplay_400Regular,
     RedHatDisplay_500Medium,
+    RedHatDisplay_600SemiBold,
     RedHatDisplay_700Bold,
   })
 
@@ -39,7 +42,11 @@ export default function LoginScreen() {
 
         <View>
           <Button title="Log In" />
-          <Button title="Forgot your password?" />
+          <Button
+            title="Forgot your password?"
+            variant={'text'}
+            style={styles.forgotPasswordButton}
+          />
         </View>
       </SafeAreaView>
     </View>
@@ -65,5 +72,9 @@ const styles = StyleSheet.create({
 
   passwordInput: {
     marginTop: theme.spacing.md,
+  },
+  forgotPasswordButton: {
+    marginTop: theme.spacing.md,
+    marginBottom: theme.spacing.md,
   },
 })
