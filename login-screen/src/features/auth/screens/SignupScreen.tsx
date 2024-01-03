@@ -1,93 +1,40 @@
 import React from 'react'
-import {
-  View,
-  Text,
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  Pressable,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native'
+import { View, Text, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 
-import {
-  RedHatDisplay_400Regular,
-  RedHatDisplay_500Medium,
-  RedHatDisplay_600SemiBold,
-  RedHatDisplay_700Bold,
-  useFonts,
-} from '@expo-google-fonts/red-hat-display'
-import { useNavigation } from '@react-navigation/core'
+import { Button, TextInput, SafeLayout } from '../../../components'
+import { EmailInput, PasswordInput, SignupHeader } from '../components'
 
-import { theme } from '../../../config/theme'
-import { Button } from '../../../components/Button/Button'
-import { TextInput } from '../../../components/TextInput'
-import { PublicStackNavigationProp } from '../../../types/index'
+import { useStyles, useTheme } from '../../../hooks'
+import { createStyleSheet } from '../../../hooks/useStyles'
 
 const isIOS = Platform.OS === 'ios'
 
 export default function SignupScreen() {
-  /// Navigation
-  const navigation = useNavigation<PublicStackNavigationProp>()
-
-  const handleClosePress = () => {
-    if (navigation.canGoBack()) navigation.pop()
-  }
-
-  const handleLoginPress = () => {
-    navigation.navigate('Login')
-  }
-
-  /// Fonts
-  let [fontsLoaded, fontError] = useFonts({
-    RedHatDisplay_400Regular,
-    RedHatDisplay_500Medium,
-    RedHatDisplay_600SemiBold,
-    RedHatDisplay_700Bold,
-  })
-
-  if (!fontsLoaded && !fontError) {
-    return null
-  }
+  const theme = useTheme()
+  const styles = useStyles(styleSheet)
 
   return (
-    <SafeAreaView style={styles.safeContainer}>
+    <SafeLayout style={styles.container}>
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior={isIOS ? 'padding' : 'height'}
         keyboardVerticalOffset={isIOS ? 40 : 0}
       >
-        <ScrollView style={styles.contentContainer} showsVerticalScrollIndicator={false}>
-          <View style={styles.header}>
-            <Pressable onPress={handleClosePress} style={styles.headerBtn}>
-              <Text style={styles.closeBtnTitle}>X</Text>
-            </Pressable>
-            <Text style={styles.title}>Sign Up</Text>
-            <Pressable onPress={handleLoginPress} style={[styles.headerBtn, styles.loginBtn]}>
-              <Text style={styles.loginBtnTitle}>Login</Text>
-            </Pressable>
-          </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.contentContainer}
+        >
+          <SignupHeader />
 
           <View style={styles.inputContainer}>
             <TextInput
-              placeholderTextColor={theme.colors.grayDark}
               placeholder="Name"
+              placeholderTextColor={theme.colors.grayDark}
               textContentType="name"
               style={styles.input}
             />
-            <TextInput
-              placeholderTextColor={theme.colors.grayDark}
-              placeholder="Email"
-              textContentType="emailAddress"
-              style={styles.input}
-            />
-            <TextInput
-              placeholder="Password"
-              textContentType="password"
-              secureTextEntry
-              style={styles.input}
-              placeholderTextColor={theme.colors.grayDark}
-            />
+            <EmailInput />
+            <PasswordInput />
           </View>
 
           <View style={styles.confirmationContainer}>
@@ -106,52 +53,20 @@ export default function SignupScreen() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </SafeLayout>
   )
 }
 
-const styles = StyleSheet.create({
-  safeContainer: {
+const styleSheet = createStyleSheet(({ theme }) => ({
+  container: {
     flex: 1,
     margin: theme.spacing.md,
-  },
-
-  title: {
-    fontSize: theme.fontSize.title,
-    fontFamily: 'RedHatDisplay_700Bold',
-    textAlign: 'center',
   },
   keyboardAvoidingView: {
     flex: 1,
   },
-
   contentContainer: {
     flex: 1,
-  },
-
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  headerBtn: {
-    flex: 1,
-    padding: theme.spacing.xs,
-  },
-
-  closeBtnTitle: {
-    fontSize: theme.fontSize.content,
-    fontFamily: 'RedHatDisplay_700Bold',
-    color: theme.colors.grayDark,
-  },
-
-  loginBtn: {
-    alignItems: 'flex-end',
-  },
-
-  loginBtnTitle: {
-    fontSize: theme.fontSize.content,
-    fontFamily: 'RedHatDisplay_700Bold',
-    color: theme.colors.green,
   },
   inputContainer: {
     marginVertical: theme.spacing.lg,
@@ -160,10 +75,8 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: theme.colors.grayLight,
     marginBottom: theme.spacing.md,
-  },
-
-  forgotPasswordButton: {
-    marginTop: theme.spacing.md,
+    borderColor: theme.colors.gray,
+    borderWidth: 1,
   },
 
   confirmationContainer: {
@@ -187,9 +100,14 @@ const styles = StyleSheet.create({
   confirmationCheck: {
     width: theme.spacing.md,
     height: theme.spacing.md,
-    borderRadius: theme.spacing.sm,
-    borderColor: theme.colors.grayDark,
-    backgroundColor: theme.colors.gray,
+    borderRadius: 4,
+    borderColor: theme.colors.gray,
+    backgroundColor: theme.colors.grayLight,
     marginRight: theme.spacing.sm,
+    borderWidth: 1,
   },
-})
+
+  forgotPasswordButton: {
+    marginTop: theme.spacing.md,
+  },
+}))

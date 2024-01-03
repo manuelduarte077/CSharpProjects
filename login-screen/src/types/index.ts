@@ -1,1 +1,1 @@
-export { PublicStackNavigationProp, PublicStackParamList } from './navigation'
+export type { PublicStackNavigationProp, PublicStackParamList } from './navigation'

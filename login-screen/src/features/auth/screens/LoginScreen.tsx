@@ -1,80 +1,71 @@
 import React from 'react'
-import { View, Text, SafeAreaView, StyleSheet } from 'react-native'
+import { View, Text, KeyboardAvoidingView, Platform, ScrollView } from 'react-native'
 
-import {
-  RedHatDisplay_400Regular,
-  RedHatDisplay_500Medium,
-  RedHatDisplay_600SemiBold,
-  RedHatDisplay_700Bold,
-  useFonts,
-} from '@expo-google-fonts/red-hat-display'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { Button, SafeLayout } from '../../../components'
+import { useStyles } from '../../../hooks'
+import { createStyleSheet } from '../../../hooks/useStyles'
+import { EmailInput, PasswordInput } from '../components'
 
-import { TextInput } from '../../../components/TextInput/TextInput'
-import { Button } from '../../../components/Button/Button'
-import { theme } from '../../../config/theme'
+const isIOS = Platform.OS === 'ios'
 
 export default function LoginScreen() {
-  /// SafeArea
-  const insets = useSafeAreaInsets()
-
-  /// Fonts
-  let [fontsLoaded, fontError] = useFonts({
-    RedHatDisplay_400Regular,
-    RedHatDisplay_500Medium,
-    RedHatDisplay_600SemiBold,
-    RedHatDisplay_700Bold,
-  })
-
-  if (!fontsLoaded && !fontError) {
-    return null
-  }
+  const styles = useStyles(styleSheet)
 
   return (
-    <View style={{ flex: 1, paddingTop: insets.top }}>
-      <SafeAreaView style={styles.safeContainer}>
-        <Text style={styles.title}>Login Screen</Text>
+    <SafeLayout style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoidingView}
+        behavior={isIOS ? 'padding' : 'height'}
+        keyboardVerticalOffset={isIOS ? 40 : 0}
+      >
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.contentContainer}
+        >
+          <Text style={styles.title}>Login Screen</Text>
 
-        <View style={styles.inputContainer}>
-          <TextInput placeholder="Email" />
-          <TextInput placeholder="Password" secureTextEntry style={styles.passwordInput} />
-        </View>
+          <View style={styles.inputContainer}>
+            <EmailInput />
+            <PasswordInput />
+          </View>
 
-        <View>
-          <Button title="Log In" />
-          <Button
-            title="Forgot your password?"
-            variant={'text'}
-            style={styles.forgotPasswordButton}
-          />
-        </View>
-      </SafeAreaView>
-    </View>
+          <View>
+            <Button title="Log In" />
+            <Button
+              title="Forgot your password?"
+              variant={'text'}
+              style={styles.forgotPasswordButton}
+            />
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeLayout>
   )
 }
 
-const styles = StyleSheet.create({
-  safeContainer: {
+const styleSheet = createStyleSheet(({ theme }) => ({
+  container: {
     flex: 1,
     margin: theme.spacing.md,
   },
-
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  contentContainer: {
+    flex: 1,
+  },
   title: {
     fontSize: theme.fontSize.title,
     fontFamily: 'RedHatDisplay_700Bold',
     textAlign: 'center',
   },
-
   inputContainer: {
-    marginTop: theme.spacing.lg,
     flex: 1,
+    marginVertical: theme.spacing.lg,
   },
 
-  passwordInput: {
-    marginTop: theme.spacing.md,
-  },
   forgotPasswordButton: {
     marginTop: theme.spacing.md,
     marginBottom: theme.spacing.md,
   },
-})
+}))

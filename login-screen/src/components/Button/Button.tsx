@@ -1,6 +1,8 @@
 import React from 'react'
-import { Text, PressableProps, Pressable, StyleSheet, ViewProps } from 'react-native'
-import { theme } from '../../config/theme'
+import { Text, PressableProps, Pressable, ViewProps } from 'react-native'
+
+import { useStyles } from '../../hooks/useStyles'
+import { createStyleSheet } from '../../hooks/useStyles'
 
 type Props = PressableProps & {
   title: string
@@ -8,6 +10,8 @@ type Props = PressableProps & {
 }
 
 export const Button = ({ title, variant, style, ...rest }: Props) => {
+  const styles = useStyles(styleSheet)
+
   const isText = variant === 'text'
 
   return (
@@ -20,7 +24,7 @@ export const Button = ({ title, variant, style, ...rest }: Props) => {
   )
 }
 
-const styles = StyleSheet.create({
+const styleSheet = createStyleSheet(({ theme }) => ({
   button: {
     paddingVertical: theme.spacing.md,
     backgroundColor: theme.colors.green,
@@ -44,4 +48,4 @@ const styles = StyleSheet.create({
   textButtonTitle: {
     color: theme.colors.green,
   },
-})
+}))
