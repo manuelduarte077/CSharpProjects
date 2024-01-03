@@ -2,6 +2,7 @@ const colors = {
   grayLight: '#f6f6f6',
   gray: '#e8e8e8',
   grayDark: '#bdbdbd',
+  grayDarker: '#666666',
   green: '#5db075',
   black: '#000000',
   white: '#ffffff',
@@ -18,6 +19,7 @@ const roundness = {
 }
 
 const spacing = {
+  sm: 4,
   xs: 8,
   md: 16,
   lg: 32,

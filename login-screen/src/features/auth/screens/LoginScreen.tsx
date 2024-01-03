@@ -10,9 +10,9 @@ import {
 } from '@expo-google-fonts/red-hat-display'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { theme } from '../components/config/theme'
-import { TextInput } from '../components/TextInput/TextInput'
-import { Button } from '../components/Button/Button'
+import { TextInput } from '../../../components/TextInput/TextInput'
+import { Button } from '../../../components/Button/Button'
+import { theme } from '../../../config/theme'
 
 export default function LoginScreen() {
   /// SafeArea

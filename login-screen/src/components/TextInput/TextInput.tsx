@@ -8,9 +8,13 @@ import {
   Pressable,
 } from 'react-native'
 
-import { theme } from '../config/theme'
+import { theme } from '../../config/theme'
 
-export const TextInput = ({ secureTextEntry, style, ...rest }: TextInputProps) => {
+export const TextInput = ({
+  secureTextEntry,
+  style,
+  ...rest
+}: TextInputProps) => {
   const [showPassword, setShowPassword] = useState(secureTextEntry || false)
 
   const toggleShowPassword = () => {
@@ -27,7 +31,9 @@ export const TextInput = ({ secureTextEntry, style, ...rest }: TextInputProps) =
       />
       {secureTextEntry && (
         <Pressable style={styles.showBtn} onPress={toggleShowPassword}>
-          <Text style={styles.showBtnText}>{showPassword ? 'Show' : 'Hide'}</Text>
+          <Text style={styles.showBtnText}>
+            {showPassword ? 'Show' : 'Hide'}
+          </Text>
         </Pressable>
       )}
     </View>

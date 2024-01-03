@@ -1,10 +1,10 @@
-import LoginScreen from './src/screens/LoginScreen'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { PublicRoute } from './src/routes'
+import { NavigationContainer } from '@react-navigation/native'
 
 export default function App() {
   return (
-    <SafeAreaProvider>
-      <LoginScreen />
-    </SafeAreaProvider>
+    <NavigationContainer>
+      <PublicRoute />
+    </NavigationContainer>
   )
 }

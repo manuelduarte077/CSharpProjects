@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, PressableProps, Pressable, StyleSheet, ViewProps } from 'react-native'
-import { theme } from '../config/theme'
+import { theme } from '../../config/theme'
 
 type Props = PressableProps & {
   title: string
