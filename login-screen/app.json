@@ -5,15 +5,8 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "plugins": [
-      [
-        "expo-font",
-        {
-          "fonts": "node_modules/@expo-google-fonts/red-hat-display/RedHatDisplay[400,500,700].ttf"
-        }
-      ]
-    ],
+    "userInterfaceStyle": "automatic",
+  
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
