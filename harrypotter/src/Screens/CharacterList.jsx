@@ -25,7 +25,7 @@ export default function CharacterList() {
     fetch(URL)
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Someting went wrong')
+          throw new Error('Wrong')
         }
 
         return response.json()
@@ -62,7 +62,7 @@ export default function CharacterList() {
               <Text style={{ fontSize: 24, fontWeight: 'bold' }}>
                 {item.house}
               </Text>
-              <Image style={styles.image} source={{ uri: item.image }} />
+              <Image style={styles.imageCard} source={{ uri: item.image }} />
               <Text style={{ fontSize: 18, textAlign: 'center' }}>
                 {item.name}
               </Text>
@@ -72,7 +72,11 @@ export default function CharacterList() {
               </Text>
 
               <Text style={{ fontSize: 18, textAlign: 'center' }}>
-                {item.dateOfBirth}
+                {item.dateOfBirth ?? 'No Data'}
+              </Text>
+
+              <Text style={{ fontSize: 18, textAlign: 'center' }}>
+                {item.uri ?? 'No Data'}
               </Text>
             </View>
           )}
@@ -84,18 +88,16 @@ export default function CharacterList() {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'center',
+    flex: 1,
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    marginTop: 20,
+    alignItems: 'center',
+    margin: 10,
+    padding: 10,
+    borderRadius: 10,
+    borderColor: 'black',
+    borderWidth: 1,
   },
-  image: {
+  imageCard: {
     height: 200,
     width: 200,
   },
