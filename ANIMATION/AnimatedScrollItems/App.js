@@ -1,17 +1,12 @@
 import * as React from "react";
 import {
   StatusBar,
-  FlatList,
   Image,
   Animated,
   Text,
   View,
   Dimensions,
   StyleSheet,
-  TouchableOpacity,
-  Easing,
-  SafeAreaViewBase,
-  SafeAreaView,
 } from "react-native";
 const { width, height } = Dimensions.get("screen");
 import { faker } from "@faker-js/faker";
