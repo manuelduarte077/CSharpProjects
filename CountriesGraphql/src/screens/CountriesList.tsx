@@ -31,7 +31,6 @@ export default function CountriesList() {
 
 const styles = StyleSheet.create({
   appBar: {
-    backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
     padding: 10,
@@ -42,10 +41,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 10,
     borderRadius: 5,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
+
   },
   text: {
     fontSize: 16,
