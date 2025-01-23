@@ -1,9 +1,9 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import CountriesList from './CountriesList';
-import ContinentsList from './ContinentsList';
-import ContinentDetail from './ContinentDetail';
+import CountriesList from './features/countries/screens/CountriesList';
+import ContinentsList from './features/continents/screens/ContinentsList';
+import ContinentDetail from './features/continents/screens/ContinentDetail';
 
 type RootStackParamList = {
   MainTabs: undefined;

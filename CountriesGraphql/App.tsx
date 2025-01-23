@@ -2,7 +2,7 @@ import React from 'react';
 import {ApolloProvider} from '@apollo/client';
 import client from './src/api/ApolloClient';
 import {NavigationContainer} from '@react-navigation/native';
-import HomeScreen from './src/screens/HomeScreen';
+import HomeScreen from './src/HomeScreen';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {StyleSheet} from 'react-native';
 
