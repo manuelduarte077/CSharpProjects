@@ -18,3 +18,17 @@ export const GET_COUNTRIES = gql`
     }
   }
 `;
+
+export const GET_COUNTRIES_BY_CONTINENT = gql`
+  query GetCountriesByContinent($code: ID!) {
+    continent(code: $code) {
+      code
+      name
+      countries {
+        code
+        name
+        emoji
+      }
+    }
+  }
+`;

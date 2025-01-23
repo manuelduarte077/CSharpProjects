@@ -9,25 +9,26 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useQuery} from '@apollo/client';
-import {GET_CONTINENTS} from '../graphql/queries';
-import {ContinentsData} from '../types/continents';
+import {GET_COUNTRIES_BY_CONTINENT} from '../graphql/queries';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 type RootStackParamList = {
-  MainTabs: undefined;
   ContinentDetail: {code: string; name: string};
 };
 
-type Props = NativeStackScreenProps<RootStackParamList, 'MainTabs'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'ContinentDetail'>;
 
-export default function ContinentsList({navigation}: Props) {
-  const {loading, error, data} = useQuery<ContinentsData>(GET_CONTINENTS);
+export default function ContinentDetail({route, navigation}: Props) {
+  const {code, name} = route.params;
+  const {loading, error, data} = useQuery(GET_COUNTRIES_BY_CONTINENT, {
+    variables: {code},
+  });
 
   if (loading) {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
-        <Text style={styles.loadingText}>Loading continents...</Text>
+        <Text style={styles.loadingText}>Loading countries...</Text>
       </View>
     );
   }
@@ -43,20 +44,23 @@ export default function ContinentsList({navigation}: Props) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>World Continents</Text>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}>
+          <Text style={styles.backButtonText}>← Back</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>{name}</Text>
       </View>
       <FlatList
-        data={data?.continents}
+        data={data?.continent?.countries}
         keyExtractor={item => item.code}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
         renderItem={({item}) => (
-          <TouchableOpacity
-            style={styles.continentItem}
-            onPress={() => navigation.navigate('ContinentDetail', {code: item.code, name: item.name})}>
-            <Text style={styles.continentItemText}>{item.name}</Text>
-            <Text style={styles.continentCode}>{item.code}</Text>
-          </TouchableOpacity>
+          <View style={styles.countryItem}>
+            <Text style={styles.countryItemText}>{item.name}</Text>
+            <Text style={styles.countryEmoji}>{item.emoji}</Text>
+          </View>
         )}
       />
     </SafeAreaView>
@@ -79,16 +83,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  backButton: {
+    marginRight: 16,
+  },
+  backButtonText: {
+    fontSize: 16,
+    color: '#007AFF',
+    fontWeight: '600',
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#333333',
+    flex: 1,
   },
   listContainer: {
     padding: 16,
   },
-  continentItem: {
+  countryItem: {
     backgroundColor: '#ffffff',
     padding: 16,
     borderRadius: 8,
@@ -101,15 +116,13 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 1},
     shadowRadius: 1,
   },
-  continentItemText: {
+  countryItemText: {
     fontSize: 18,
     fontWeight: '600',
     color: '#333333',
   },
-  continentCode: {
-    fontSize: 14,
-    color: '#666666',
-    fontWeight: '500',
+  countryEmoji: {
+    fontSize: 24,
   },
   loadingText: {
     marginTop: 12,
