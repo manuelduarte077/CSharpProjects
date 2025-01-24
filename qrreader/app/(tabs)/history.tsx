@@ -5,9 +5,13 @@ import {
   Text,
   Animated,
   SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
 import React, { useRef } from "react";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTheme } from "../../context/ThemeContext";
+import Colors from "../../constants/Colors";
+import ThemeToggle from "../../components/ThemeToggle";
 
 interface QRScanItem {
   id: string;
@@ -16,6 +20,9 @@ interface QRScanItem {
 }
 
 export default function HistoryScreen() {
+  const { theme, toggleTheme } = useTheme();
+  const colors = Colors[theme];
+
   const placeholderData: QRScanItem[] = [
     {
       id: "1",
@@ -67,12 +74,12 @@ export default function HistoryScreen() {
       ]}
     >
       <LinearGradient
-        colors={["#ffffff", "#f8f9fa"]}
+        colors={[colors.cardBackground, colors.cardBackground]}
         style={styles.cardGradient}
       >
         <View style={styles.contentContainer}>
-          <Text style={styles.content}>{item.content}</Text>
-          <Text style={styles.timestamp}>
+          <Text style={[styles.content, { color: colors.text }]}>{item.content}</Text>
+          <Text style={[styles.timestamp, { color: colors.placeholderText }]}>
             {new Date(item.timestamp).toLocaleString()}
           </Text>
         </View>
@@ -81,9 +88,12 @@ export default function HistoryScreen() {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <Text style={styles.headerTitle}>Scan History</Text>
+    <SafeAreaView style={[{ flex: 1 }, { backgroundColor: colors.background }]}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={styles.header}>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>Scan History</Text>
+          <ThemeToggle />
+        </View>
         <FlatList
           data={placeholderData}
           renderItem={renderItem}
@@ -100,14 +110,25 @@ export default function HistoryScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#f0f2f5",
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 18,
   },
   headerTitle: {
     fontSize: 28,
     fontWeight: "700",
-    color: "#1a1a1a",
-    paddingHorizontal: 20,
-    paddingTop: 18,
+  },
+  themeToggle: {
+    padding: 10,
+    borderRadius: 20,
+  },
+  themeToggleText: {
+    fontSize: 16,
   },
   listContainer: {
     padding: 20,
@@ -134,13 +155,11 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#2c3e50",
     marginBottom: 8,
     letterSpacing: 0.3,
   },
   timestamp: {
     fontSize: 14,
-    color: "#7f8c8d",
     fontWeight: "500",
     letterSpacing: 0.2,
   },
