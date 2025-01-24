@@ -6,8 +6,9 @@ import {
   View,
   ActivityIndicator,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
-import React from 'react';
+import React, {useState, useMemo} from 'react';
 import {useQuery} from '@apollo/client';
 import {GET_COUNTRIES_BY_CONTINENT} from '../queries';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -20,9 +21,17 @@ type Props = NativeStackScreenProps<RootStackParamList, 'ContinentDetail'>;
 
 export default function ContinentDetail({route, navigation}: Props) {
   const {code, name} = route.params;
+  const [searchQuery, setSearchQuery] = useState('');
   const {loading, error, data} = useQuery(GET_COUNTRIES_BY_CONTINENT, {
     variables: {code},
   });
+
+  const filteredCountries = useMemo(() => {
+    if (!data?.continent?.countries) return [];
+    return data.continent.countries.filter((country: { name: string }) =>
+      country.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
+  }, [data?.continent?.countries, searchQuery]);
 
   if (loading) {
     return (
@@ -51,8 +60,19 @@ export default function ContinentDetail({route, navigation}: Props) {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{name}</Text>
       </View>
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search countries..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          clearButtonMode="while-editing"
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+      </View>
       <FlatList
-        data={data?.continent?.countries}
+        data={filteredCountries}
         keyExtractor={item => item.code}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
@@ -99,6 +119,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333333',
     flex: 1,
+  },
+  searchContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  searchInput: {
+    height: 40,
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    fontSize: 16,
+    color: '#333333',
   },
   listContainer: {
     padding: 16,

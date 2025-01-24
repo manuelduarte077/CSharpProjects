@@ -6,13 +6,24 @@ import React from 'react';
 import {useQuery} from '@apollo/client';
 import {GET_CONTINENTS} from '../queries';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import type {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import type {CompositeNavigationProp} from '@react-navigation/native';
 
 type RootStackParamList = {
-  MainTabs: undefined;
   ContinentDetail: {code: string; name: string};
 };
 
-type Props = NativeStackScreenProps<RootStackParamList, 'MainTabs'>;
+type TabParamList = {
+  Continents: undefined;
+  Countries: undefined;
+};
+
+type Props = {
+  navigation: CompositeNavigationProp<
+    BottomTabNavigationProp<TabParamList, 'Continents'>,
+    NativeStackScreenProps<RootStackParamList>['navigation']
+  >;
+};
 
 export default function ContinentsList({navigation}: Props) {
   const {loading, error, data} = useQuery(GET_CONTINENTS);
