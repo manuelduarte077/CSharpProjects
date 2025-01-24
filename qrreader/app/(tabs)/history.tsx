@@ -4,7 +4,6 @@ import {
   View,
   Text,
   Animated,
-  Dimensions,
   SafeAreaView,
 } from "react-native";
 import React, { useRef } from "react";
