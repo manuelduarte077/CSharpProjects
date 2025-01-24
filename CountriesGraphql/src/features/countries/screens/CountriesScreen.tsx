@@ -1,13 +1,14 @@
-import {
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-  TextInput,
-} from 'react-native';
 import React, {useState, useMemo} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TextInput,
+  SafeAreaView,
+  ActivityIndicator,
+  Pressable,
+} from 'react-native';
 import {useQuery} from '@apollo/client';
 import {GET_COUNTRIES} from '../queries';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -23,7 +24,7 @@ type RootStackParamList = {
 
 type Props = NativeStackScreenProps<RootStackParamList>;
 
-export default function CountriesList({navigation}: Props) {
+export default function CountriesScreen({navigation}: Props) {
   const [searchQuery, setSearchQuery] = useState('');
   const {loading, error, data} = useQuery(GET_COUNTRIES);
 
@@ -54,7 +55,7 @@ export default function CountriesList({navigation}: Props) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>World Countries</Text>
+        <Text style={styles.headerTitle}>Countries</Text>
       </View>
       <View style={styles.searchContainer}>
         <TextInput
@@ -81,26 +82,25 @@ export default function CountriesList({navigation}: Props) {
           />
         )}
       />
-    </SafeAreaView> 
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#F5F5F5',
   },
   centerContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
   },
   header: {
-    paddingVertical: 16,
-    paddingHorizontal: 20,
+    padding: 16,
+    backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#E0E0E0',
   },
   headerTitle: {
     fontSize: 24,
@@ -108,55 +108,64 @@ const styles = StyleSheet.create({
     color: '#333333',
   },
   searchContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
+    padding: 16,
+    backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#E0E0E0',
   },
   searchInput: {
     height: 40,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#F0F0F0',
     borderRadius: 8,
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     fontSize: 16,
-    color: '#333333',
   },
   listContainer: {
     padding: 16,
   },
-  countryItem: {
-    backgroundColor: '#ffffff',
+  countryCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
     padding: 16,
-    borderRadius: 8,
     marginBottom: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    elevation: 1,
+    elevation: 2,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
-    shadowRadius: 1,
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
-  countryItemText: {
+  countryCardPressed: {
+    backgroundColor: '#F8F8F8',
+    transform: [{scale: 0.98}],
+  },
+  countryInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  countryEmoji: {
+    fontSize: 40,
+    marginRight: 16,
+  },
+  countryTextContainer: {
+    flex: 1,
+  },
+  countryName: {
     fontSize: 18,
     fontWeight: '600',
     color: '#333333',
+    marginBottom: 4,
   },
-  countryItemPressed: {
-    backgroundColor: '#e0e0e0',
-  },
-  countryEmoji: {
-    fontSize: 24,
+  countryCode: {
+    fontSize: 14,
+    color: '#666666',
   },
   loadingText: {
-    marginTop: 12,
+    marginTop: 8,
     fontSize: 16,
     color: '#666666',
   },
   errorText: {
+    color: '#FF0000',
     fontSize: 16,
-    color: '#ff3b30',
-    textAlign: 'center',
-    paddingHorizontal: 24,
   },
 });

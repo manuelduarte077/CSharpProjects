@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import CountryCard from '../../countries/components/CountryCard';
 import React, {useState, useMemo} from 'react';
 import {useQuery} from '@apollo/client';
 import {GET_COUNTRIES_BY_CONTINENT} from '../queries';
@@ -77,10 +78,12 @@ export default function ContinentDetail({route, navigation}: Props) {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
         renderItem={({item}) => (
-          <View style={styles.countryItem}>
-            <Text style={styles.countryItemText}>{item.name}</Text>
-            <Text style={styles.countryEmoji}>{item.emoji}</Text>
-          </View>
+          <CountryCard
+            name={item.name}
+            code={item.code}
+            emoji={item.emoji}
+            onPress={() => navigation.navigate('CountryDetail', item)}
+          />
         )}
       />
     </SafeAreaView>

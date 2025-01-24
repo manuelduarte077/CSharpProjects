@@ -4,10 +4,16 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import CountriesList from './features/countries/screens/CountriesList';
 import ContinentsList from './features/continents/screens/ContinentsList';
 import ContinentDetail from './features/continents/screens/ContinentDetail';
+import CountryDetail from './features/countries/screens/CountryDetail';
 
 type RootStackParamList = {
   MainTabs: undefined;
   ContinentDetail: {code: string; name: string};
+  CountryDetail: {
+    code: string;
+    name: string;
+    emoji: string;
+  };
 };
 
 const Tab = createBottomTabNavigator();
@@ -45,6 +51,11 @@ export default function HomeScreen() {
       <Stack.Screen
         name="ContinentDetail"
         component={ContinentDetail}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CountryDetail"
+        component={CountryDetail}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
