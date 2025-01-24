@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    marginHorizontal: 16,
+    marginHorizontal: 8,
     marginVertical: 8,
     flexDirection: 'row',
     alignItems: 'center',
