@@ -11,11 +11,11 @@ import {
   Alert,
   Image,
   SafeAreaView,
+  Modal,
 } from "react-native";
 import * as Location from "expo-location";
 import MapView, { Marker, Region } from "react-native-maps";
 
-// Interfaz actualizada para incluir la propiedad geometry (latitud y longitud)
 interface Place {
   place_id: string;
   name: string;
@@ -48,6 +48,8 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [location, setLocation] = useState<Coordinates | null>(null);
   const [locationErrorMsg, setLocationErrorMsg] = useState<string | null>(null);
+  // Estado para almacenar el place seleccionado y mostrar sus detalles
+  const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 
   // Solicitar permisos y obtener la ubicación actual
   useEffect(() => {
@@ -77,11 +79,11 @@ const App: React.FC = () => {
     }
   }, [location]);
 
-  // Función que realiza la búsqueda predeterminada (por ejemplo, "restaurant")
+  // Función que realiza la búsqueda predeterminada (por ejemplo, "coffee")
   // y limita los resultados a 5 para la carga inicial.
   const loadDefaultPlaces = async (): Promise<void> => {
     try {
-      const defaultQuery = encodeURIComponent("restaurant");
+      const defaultQuery = encodeURIComponent("coffee");
       const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${defaultQuery}&location=${location!.latitude},${location!.longitude}&radius=10000&key=${API_KEY}`;
       const response = await fetch(url);
       const data = await response.json();
@@ -90,7 +92,11 @@ const App: React.FC = () => {
         // Se toman solo los 5 primeros resultados para la carga inicial
         setPlaces(data.results.slice(0, 5));
       } else {
-        console.error("Error en la búsqueda predeterminada:", data.status, data.error_message);
+        console.error(
+          "Error en la búsqueda predeterminada:",
+          data.status,
+          data.error_message
+        );
       }
     } catch (error) {
       console.error("Error al cargar la búsqueda predeterminada:", error);
@@ -142,10 +148,10 @@ const App: React.FC = () => {
     }
   };
 
-  // Renderiza cada ítem de la lista (se envuelve en TouchableOpacity para futuras interacciones)
+  // Renderiza cada ítem de la lista; al hacer clic, se muestran los detalles del place
   const renderItem = ({ item }: { item: Place }) => (
     <View style={styles.item}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => setSelectedPlace(item)}>
         <Text style={styles.title}>{item.name}</Text>
         <Text>{item.formatted_address}</Text>
         <Text>{item.business_status}</Text>
@@ -184,6 +190,8 @@ const App: React.FC = () => {
               }}
               title={place.name}
               description={place.formatted_address}
+              // Al presionar el marker se actualiza el place seleccionado
+              onPress={() => setSelectedPlace(place)}
             >
               <Image source={{ uri: place.icon }} style={styles.markerIcon} />
             </Marker>
@@ -230,6 +238,43 @@ const App: React.FC = () => {
           contentContainerStyle={{ paddingVertical: 10 }}
         />
       )}
+
+      {/* Modal para mostrar los detalles del place seleccionado */}
+      <Modal
+        visible={selectedPlace !== null}
+        animationType="slide"
+        onRequestClose={() => setSelectedPlace(null)}
+      >
+        <SafeAreaView style={styles.modalContainer}>
+          <TouchableOpacity
+            style={styles.modalCloseButton}
+            onPress={() => setSelectedPlace(null)}
+          >
+            <Text style={styles.modalCloseText}>Cerrar</Text>
+          </TouchableOpacity>
+          {selectedPlace && (
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>{selectedPlace.name}</Text>
+              <Image
+                source={{ uri: selectedPlace.icon }}
+                style={styles.modalImage}
+              />
+              <Text style={styles.modalAddress}>
+                {selectedPlace.formatted_address}
+              </Text>
+              <Text style={styles.modalStatus}>
+                Status: {selectedPlace.business_status}
+              </Text>
+              <Text style={styles.modalRating}>
+                Rating: {selectedPlace.rating} ({selectedPlace.user_ratings_total} reseñas)
+              </Text>
+              <Text style={styles.modalOffset}>
+                UTC Offset: {selectedPlace.utc_offset_minutes}
+              </Text>
+            </View>
+          )}
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -300,5 +345,48 @@ const styles = StyleSheet.create({
   },
   marker: {
     elevation: 10,
+  },
+  modalContainer: {
+    backgroundColor: "#fff",
+    padding: 16,
+    margin: 10,
+    borderRadius: 8,
+  },
+  modalCloseButton: {
+    alignSelf: "flex-end",
+    padding: 8,
+  },
+  modalCloseText: {
+    fontSize: 16,
+    color: "#4285F4",
+  },
+  modalContent: {
+    marginTop: 16,
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+  modalImage: {
+    width: 60,
+    height: 60,
+    marginBottom: 8,
+  },
+  modalAddress: {
+    fontSize: 16,
+    marginBottom: 4,
+  },
+  modalStatus: {
+    fontSize: 16,
+    marginBottom: 4,
+  },
+  modalRating: {
+    fontSize: 16,
+    marginBottom: 4,
+  },
+  modalOffset: {
+    fontSize: 14,
+    color: "gray",
   },
 });
