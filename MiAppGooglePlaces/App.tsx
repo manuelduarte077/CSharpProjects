@@ -50,6 +50,9 @@ const App: React.FC = () => {
   const [locationErrorMsg, setLocationErrorMsg] = useState<string | null>(null);
   // Estado para almacenar el place seleccionado y mostrar sus detalles
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+  // Estado para almacenar en caché los resultados de las búsquedas.
+  // La clave será el término de búsqueda y el valor el arreglo de resultados.
+  const [cache, setCache] = useState<{ [key: string]: Place[] }>({});
 
   // Solicitar permisos y obtener la ubicación actual
   useEffect(() => {
@@ -82,15 +85,24 @@ const App: React.FC = () => {
   // Función que realiza la búsqueda predeterminada (por ejemplo, "coffee")
   // y limita los resultados a 5 para la carga inicial.
   const loadDefaultPlaces = async (): Promise<void> => {
+    const defaultQuery = "coffee";
+    // Si ya tenemos resultados en caché para el query predeterminado, los usamos.
+    if (cache[defaultQuery]) {
+      setPlaces(cache[defaultQuery]);
+      return;
+    }
     try {
-      const defaultQuery = encodeURIComponent("coffee");
-      const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${defaultQuery}&location=${location!.latitude},${location!.longitude}&radius=10000&key=${API_KEY}`;
+      const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(
+        defaultQuery
+      )}&location=${location!.latitude},${location!.longitude}&radius=10000&key=${API_KEY}`;
       const response = await fetch(url);
       const data = await response.json();
 
       if (data.status === "OK") {
         // Se toman solo los 5 primeros resultados para la carga inicial
-        setPlaces(data.results.slice(0, 5));
+        const results = data.results.slice(0, 5);
+        setPlaces(results);
+        setCache((prev) => ({ ...prev, [defaultQuery]: results }));
       } else {
         console.error(
           "Error en la búsqueda predeterminada:",
@@ -120,18 +132,27 @@ const App: React.FC = () => {
       return;
     }
 
+    const query = searchText.trim();
+
+    // Si el query ya está en caché, usamos esos resultados sin hacer una nueva llamada.
+    if (cache[query]) {
+      setPlaces(cache[query]);
+      return;
+    }
+
     setLoading(true);
     Keyboard.dismiss();
 
     try {
-      const query = encodeURIComponent(searchText);
-      const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${query}&location=${location.latitude},${location.longitude}&radius=10000&key=${API_KEY}`;
+      const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(
+        query
+      )}&location=${location.latitude},${location.longitude}&radius=10000&key=${API_KEY}`;
       const response = await fetch(url);
       const data = await response.json();
 
       if (data.status === "OK") {
-        // Se muestran TODOS los resultados de la búsqueda manual
         setPlaces(data.results);
+        setCache((prev) => ({ ...prev, [query]: data.results }));
       } else {
         console.error("Error en la búsqueda:", data.status, data.error_message);
         setPlaces([]);
@@ -347,9 +368,11 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   modalContainer: {
-    backgroundColor: "#fff",
+    flex: 1,
     padding: 16,
-    margin: 10,
+    backgroundColor: "#fff",
+    marginHorizontal: 10,
+    marginVertical: 10,
     borderRadius: 8,
   },
   modalCloseButton: {
