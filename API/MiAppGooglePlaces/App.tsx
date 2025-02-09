@@ -15,46 +15,42 @@ import {
 } from "react-native";
 import * as Location from "expo-location";
 import MapView, { Marker, Region } from "react-native-maps";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
+import { searchPlacesByQuery } from "./src/api/places";
+import { Place, Coordinates } from "./src/types/places";
 
-interface Place {
-  place_id: string;
-  name: string;
-  formatted_address: string;
-  business_status: string;
-  rating: number;
-  user_ratings_total: number;
-  utc_offset_minutes: number;
-  types: string[];
-  icon: string;
-  geometry: {
-    location: {
-      lat: number;
-      lng: number;
-    };
-  };
+const queryClient = new QueryClient();
+
+// Wrapper component for React Query
+export default function AppWrapper() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  );
 }
-
-interface Coordinates {
-  latitude: number;
-  longitude: number;
-}
-
-// Reemplaza esta API key por la tuya (o utiliza variables de entorno)
-const API_KEY = "AIzaSyBZGbLTAnBvUU2TqWlS2J0cQoOzSfLXsWI";
 
 const App: React.FC = () => {
   const [searchText, setSearchText] = useState<string>("");
-  const [places, setPlaces] = useState<Place[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const [location, setLocation] = useState<Coordinates | null>(null);
   const [locationErrorMsg, setLocationErrorMsg] = useState<string | null>(null);
-  // Estado para almacenar el place seleccionado y mostrar sus detalles
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
-  // Estado para almacenar en caché los resultados de las búsquedas.
-  // La clave será el término de búsqueda y el valor el arreglo de resultados.
-  const [cache, setCache] = useState<{ [key: string]: Place[] }>({});
 
-  // Solicitar permisos y obtener la ubicación actual
+  // React Query hook for places
+  const { data: places = [], isLoading, refetch } = useQuery({
+    queryKey: ['places', searchText, location],
+    queryFn: () => 
+      location
+        ? searchPlacesByQuery(
+            searchText || "coffee",
+            location.latitude,
+            location.longitude
+          )
+        : Promise.reject("No location available"),
+    enabled: !!location,
+    staleTime: 5 * 60 * 1000,
+  });
+
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -75,51 +71,7 @@ const App: React.FC = () => {
     })();
   }, []);
 
-  // Cuando ya se tenga la ubicación, se carga automáticamente una búsqueda predeterminada
-  useEffect(() => {
-    if (location) {
-      loadDefaultPlaces();
-    }
-  }, [location]);
-
-  // Función que realiza la búsqueda predeterminada (por ejemplo, "coffee")
-  // y limita los resultados a 5 para la carga inicial.
-  const loadDefaultPlaces = async (): Promise<void> => {
-    const defaultQuery = "coffee";
-    // Si ya tenemos resultados en caché para el query predeterminado, los usamos.
-    if (cache[defaultQuery]) {
-      setPlaces(cache[defaultQuery]);
-      return;
-    }
-    try {
-      const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(
-        defaultQuery
-      )}&location=${location!.latitude},${location!.longitude}&radius=10000&key=${API_KEY}`;
-      const response = await fetch(url);
-      const data = await response.json();
-
-      if (data.status === "OK") {
-        // Se toman solo los 5 primeros resultados para la carga inicial
-        const results = data.results.slice(0, 5);
-        setPlaces(results);
-        setCache((prev) => ({ ...prev, [defaultQuery]: results }));
-      } else {
-        console.error(
-          "Error en la búsqueda predeterminada:",
-          data.status,
-          data.error_message
-        );
-      }
-    } catch (error) {
-      console.error("Error al cargar la búsqueda predeterminada:", error);
-    }
-  };
-
-  // Función de búsqueda manual; en este caso se muestran todos los resultados de la API.
-  const searchPlaces = async (): Promise<void> => {
-    // Evitar múltiples peticiones concurrentes
-    if (loading) return;
-
+  const handleSearch = () => {
     if (!searchText) {
       Alert.alert("Atención", "Por favor ingresa un término de búsqueda.");
       return;
@@ -132,41 +84,8 @@ const App: React.FC = () => {
       return;
     }
 
-    const query = searchText.trim();
-
-    // Si el query ya está en caché, usamos esos resultados sin hacer una nueva llamada.
-    if (cache[query]) {
-      setPlaces(cache[query]);
-      return;
-    }
-
-    setLoading(true);
     Keyboard.dismiss();
-
-    try {
-      const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(
-        query
-      )}&location=${location.latitude},${location.longitude}&radius=10000&key=${API_KEY}`;
-      const response = await fetch(url);
-      const data = await response.json();
-
-      if (data.status === "OK") {
-        setPlaces(data.results);
-        setCache((prev) => ({ ...prev, [query]: data.results }));
-      } else {
-        console.error("Error en la búsqueda:", data.status, data.error_message);
-        setPlaces([]);
-        Alert.alert(
-          "Error",
-          "No se encontraron resultados. Intenta con otro término de búsqueda."
-        );
-      }
-    } catch (error) {
-      console.error("Error al consultar la API:", error);
-      Alert.alert("Error", "Ocurrió un error al buscar los lugares.");
-    } finally {
-      setLoading(false);
-    }
+    refetch();
   };
 
   // Renderiza cada ítem de la lista; al hacer clic, se muestran los detalles del place
@@ -186,7 +105,6 @@ const App: React.FC = () => {
     </View>
   );
 
-  // Definir la región del mapa centrada en la ubicación del usuario
   const mapRegion: Region | undefined = location
     ? {
         latitude: location.latitude,
@@ -211,7 +129,6 @@ const App: React.FC = () => {
               }}
               title={place.name}
               description={place.formatted_address}
-              // Al presionar el marker se actualiza el place seleccionado
               onPress={() => setSelectedPlace(place)}
             >
               <Image source={{ uri: place.icon }} style={styles.markerIcon} />
@@ -236,16 +153,15 @@ const App: React.FC = () => {
           placeholder="Ingresa el lugar que buscas..."
           value={searchText}
           onChangeText={setSearchText}
-          onSubmitEditing={searchPlaces}
+          onSubmitEditing={handleSearch}
           returnKeyType="search"
         />
-        <TouchableOpacity style={styles.button} onPress={searchPlaces}>
+        <TouchableOpacity style={styles.button} onPress={handleSearch}>
           <Text style={styles.buttonText}>Buscar</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Indicador de carga y lista de resultados */}
-      {loading ? (
+      {isLoading ? (
         <ActivityIndicator
           size="large"
           color="#0000ff"
@@ -260,7 +176,6 @@ const App: React.FC = () => {
         />
       )}
 
-      {/* Modal para mostrar los detalles del place seleccionado */}
       <Modal
         visible={selectedPlace !== null}
         animationType="slide"
@@ -299,8 +214,6 @@ const App: React.FC = () => {
     </SafeAreaView>
   );
 };
-
-export default App;
 
 const styles = StyleSheet.create({
   container: {
