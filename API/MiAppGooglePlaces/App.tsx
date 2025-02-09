@@ -63,26 +63,46 @@ const App: React.FC = () => {
     staleTime: 5 * 60 * 1000,
   });
 
-  const handleLocationError = async () => {
+  const handleLocationRequest = async () => {
     Alert.alert(
       "Ubicación necesaria",
-      "Para mostrar lugares cercanos, necesitamos acceder a tu ubicación",
+      "Para mostrarte lugares cercanos, necesitamos acceder a tu ubicación",
       [
         {
-          text: "Cancelar",
+          text: "No permitir",
           style: "cancel",
+          onPress: () => {
+            Alert.alert(
+              "Funcionalidad limitada",
+              "Sin acceso a tu ubicación, algunas funciones no estarán disponibles"
+            );
+          }
         },
         {
           text: "Permitir",
-          onPress: requestLocation,
-        },
+          onPress: async () => {
+            const success = await requestLocation();
+            if (!success) {
+              Alert.alert(
+                "Error",
+                "No se pudo obtener tu ubicación. Por favor, intenta nuevamente."
+              );
+            }
+          }
+        }
       ]
     );
   };
 
+  useEffect(() => {
+    if (errorMsg) {
+      handleLocationRequest();
+    }
+  }, [errorMsg]);
+
   const handleSearch = () => {
     if (!location) {
-      handleLocationError();
+      handleLocationRequest();
       return;
     }
 
@@ -99,17 +119,26 @@ const App: React.FC = () => {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#4285F4" />
-        <Text>Obteniendo tu ubicación...</Text>
+        <Text style={styles.loadingText}>
+          Obteniendo tu ubicación...
+        </Text>
       </View>
     );
   }
 
-  if (errorMsg) {
+  if (!location) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>{errorMsg}</Text>
-        <TouchableOpacity style={styles.button} onPress={requestLocation}>
-          <Text style={styles.buttonText}>Reintentar</Text>
+        <Text style={styles.errorText}>
+          No podemos acceder a tu ubicación
+        </Text>
+        <TouchableOpacity 
+          style={styles.retryButton}
+          onPress={handleLocationRequest}
+        >
+          <Text style={styles.buttonText}>
+            Permitir acceso a ubicación
+          </Text>
         </TouchableOpacity>
       </View>
     );
@@ -351,15 +380,26 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#666',
   },
   errorContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 20,
+    backgroundColor: '#fff',
+  },
+  retryButton: {
+    backgroundColor: '#4285F4',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
   },
 });
