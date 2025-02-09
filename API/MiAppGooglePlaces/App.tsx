@@ -13,11 +13,15 @@ import {
   SafeAreaView,
   Modal,
 } from "react-native";
-import * as Location from "expo-location";
 import MapView, { Marker, Region } from "react-native-maps";
-import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
 import { searchPlacesByQuery } from "./src/api/places";
-import { Place, Coordinates } from "./src/types/places";
+import { Place } from "./src/types/places";
+import { useLocation } from "./src/hooks/useLocation";
 
 const queryClient = new QueryClient();
 
@@ -32,55 +36,58 @@ export default function AppWrapper() {
 
 const App: React.FC = () => {
   const [searchText, setSearchText] = useState<string>("");
-  const [location, setLocation] = useState<Coordinates | null>(null);
-  const [locationErrorMsg, setLocationErrorMsg] = useState<string | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+  const {
+    location,
+    errorMsg,
+    isLoading: locationLoading,
+    requestLocation,
+  } = useLocation();
 
-  // React Query hook for places
-  const { data: places = [], isLoading, refetch } = useQuery({
-    queryKey: ['places', searchText, location],
-    queryFn: () => 
+  const {
+    data: places = [],
+    isLoading: placesLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["places", searchText, location],
+    queryFn: () =>
       location
         ? searchPlacesByQuery(
-            searchText || "coffee",
+            searchText || "restaurante",
             location.latitude,
-            location.longitude
+            location.longitude,
+            10000
           )
-        : Promise.reject("No location available"),
+        : Promise.reject("Ubicación no disponible"),
     enabled: !!location,
     staleTime: 5 * 60 * 1000,
   });
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        const errorMsg = "Permiso para acceder a la ubicación denegado";
-        setLocationErrorMsg(errorMsg);
-        Alert.alert(
-          "Permiso denegado",
-          "No se pudo obtener la ubicación. Habilita el permiso en la configuración."
-        );
-        return;
-      }
-      const currentLocation = await Location.getCurrentPositionAsync({});
-      setLocation({
-        latitude: currentLocation.coords.latitude,
-        longitude: currentLocation.coords.longitude,
-      });
-    })();
-  }, []);
+  const handleLocationError = async () => {
+    Alert.alert(
+      "Ubicación necesaria",
+      "Para mostrar lugares cercanos, necesitamos acceder a tu ubicación",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Permitir",
+          onPress: requestLocation,
+        },
+      ]
+    );
+  };
 
   const handleSearch = () => {
-    if (!searchText) {
-      Alert.alert("Atención", "Por favor ingresa un término de búsqueda.");
+    if (!location) {
+      handleLocationError();
       return;
     }
-    if (!location) {
-      Alert.alert(
-        "Ubicación no disponible",
-        "No se pudo obtener tu ubicación. Intenta nuevamente."
-      );
+
+    if (!searchText) {
+      Alert.alert("Atención", "Por favor ingresa un término de búsqueda.");
       return;
     }
 
@@ -88,7 +95,26 @@ const App: React.FC = () => {
     refetch();
   };
 
-  // Renderiza cada ítem de la lista; al hacer clic, se muestran los detalles del place
+  if (locationLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#4285F4" />
+        <Text>Obteniendo tu ubicación...</Text>
+      </View>
+    );
+  }
+
+  if (errorMsg) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>{errorMsg}</Text>
+        <TouchableOpacity style={styles.button} onPress={requestLocation}>
+          <Text style={styles.buttonText}>Reintentar</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   const renderItem = ({ item }: { item: Place }) => (
     <View style={styles.item}>
       <TouchableOpacity onPress={() => setSelectedPlace(item)}>
@@ -143,11 +169,8 @@ const App: React.FC = () => {
         />
       )}
 
-      {/* Controles de búsqueda */}
       <View style={styles.controls}>
-        {locationErrorMsg && (
-          <Text style={styles.errorText}>{locationErrorMsg}</Text>
-        )}
+        {errorMsg && <Text style={styles.errorText}>{errorMsg}</Text>}
         <TextInput
           style={styles.input}
           placeholder="Ingresa el lugar que buscas..."
@@ -161,7 +184,7 @@ const App: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      {isLoading ? (
+      {placesLoading ? (
         <ActivityIndicator
           size="large"
           color="#0000ff"
@@ -202,7 +225,8 @@ const App: React.FC = () => {
                 Status: {selectedPlace.business_status}
               </Text>
               <Text style={styles.modalRating}>
-                Rating: {selectedPlace.rating} ({selectedPlace.user_ratings_total} reseñas)
+                Rating: {selectedPlace.rating} (
+                {selectedPlace.user_ratings_total} reseñas)
               </Text>
               <Text style={styles.modalOffset}>
                 UTC Offset: {selectedPlace.utc_offset_minutes}
@@ -324,5 +348,18 @@ const styles = StyleSheet.create({
   modalOffset: {
     fontSize: 14,
     color: "gray",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    padding: 20,
   },
 });

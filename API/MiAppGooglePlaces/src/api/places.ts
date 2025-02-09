@@ -16,19 +16,20 @@ interface PlacesResponse {
 export const searchPlacesByQuery = async (
   query: string,
   latitude: number,
-  longitude: number
+  longitude: number,
+  radius: number = 10000
 ): Promise<Place[]> => {
   const { data } = await placesApi.get<PlacesResponse>("/textsearch/json", {
     params: {
       query,
       location: `${latitude},${longitude}`,
-      radius: 10000,
+      radius,
       key: API_KEY,
     },
   });
 
   if (data.status !== "OK") {
-    throw new Error(data.error_message || "Error fetching places");
+    throw new Error(data.error_message || "Error al buscar lugares");
   }
 
   return data.results;
