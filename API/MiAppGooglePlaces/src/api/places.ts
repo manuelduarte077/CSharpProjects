@@ -17,7 +17,8 @@ export const searchPlacesByQuery = async (
   query: string,
   latitude: number,
   longitude: number,
-  radius: number = 10000
+  radius: number = 10000,
+  maxResults: number = 10
 ): Promise<Place[]> => {
   const { data } = await placesApi.get<PlacesResponse>("/textsearch/json", {
     params: {
@@ -25,6 +26,7 @@ export const searchPlacesByQuery = async (
       location: `${latitude},${longitude}`,
       radius,
       key: API_KEY,
+      maxResults,
     },
   });
 
@@ -32,5 +34,5 @@ export const searchPlacesByQuery = async (
     throw new Error(data.error_message || "Error al buscar lugares");
   }
 
-  return data.results;
+  return data.results.slice(0, maxResults);
 };

@@ -56,7 +56,8 @@ const App: React.FC = () => {
             searchText || "restaurante",
             location.latitude,
             location.longitude,
-            10000
+            10000,
+            10
           )
         : Promise.reject("Ubicación no disponible"),
     enabled: !!location,
@@ -169,6 +170,8 @@ const App: React.FC = () => {
       }
     : undefined;
 
+
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Riconsitos</Text>
@@ -225,6 +228,15 @@ const App: React.FC = () => {
           keyExtractor={(item) => item.place_id}
           renderItem={renderItem}
           contentContainerStyle={{ paddingVertical: 10 }}
+          ListEmptyComponent={
+            <View style={styles.emptyList}>
+              <Text style={styles.emptyListText}>
+                {placesLoading 
+                  ? "Buscando lugares..." 
+                  : "No se encontraron lugares cercanos"}
+              </Text>
+            </View>
+          }
         />
       )}
 
@@ -401,5 +413,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 5,
+  },
+  listHeader: {
+    padding: 10,
+    backgroundColor: '#f5f5f5',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  listHeaderText: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+  },
+  emptyList: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  emptyListText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
   },
 });
