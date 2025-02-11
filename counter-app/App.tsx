@@ -1,10 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import FAB from "./components/FAB";
 
 export default function App() {
+  const [count, setCount] = useState(5);
+
   return (
     <View style={styles.container}>
-      <Text>Hola Mundo</Text>
+      <Text style={styles.textHuge}>{count}</Text>
+
+      <FAB
+        label="+1"
+        onPress={() => setCount(count + 1)}
+        onLongPress={() => setCount(0)}
+        position="right"
+      />
+
+      <FAB
+        label="Reset"
+        onLongPress={() => setCount(0)}
+        position="left"
+      />
+
       <StatusBar style="auto" />
     </View>
   );
@@ -13,8 +31,13 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  textHuge: {
+    fontSize: 110,
+    fontWeight: "thin",
+    color: "#000",
   },
 });

@@ -77,7 +77,7 @@ const App: React.FC = () => {
               "Funcionalidad limitada",
               "Sin acceso a tu ubicación, algunas funciones no estarán disponibles"
             );
-          }
+          },
         },
         {
           text: "Permitir",
@@ -89,8 +89,8 @@ const App: React.FC = () => {
                 "No se pudo obtener tu ubicación. Por favor, intenta nuevamente."
               );
             }
-          }
-        }
+          },
+        },
       ]
     );
   };
@@ -120,9 +120,7 @@ const App: React.FC = () => {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#4285F4" />
-        <Text style={styles.loadingText}>
-          Obteniendo tu ubicación...
-        </Text>
+        <Text style={styles.loadingText}>Obteniendo tu ubicación...</Text>
       </View>
     );
   }
@@ -130,16 +128,12 @@ const App: React.FC = () => {
   if (!location) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>
-          No podemos acceder a tu ubicación
-        </Text>
-        <TouchableOpacity 
+        <Text style={styles.errorText}>No podemos acceder a tu ubicación</Text>
+        <TouchableOpacity
           style={styles.retryButton}
           onPress={handleLocationRequest}
         >
-          <Text style={styles.buttonText}>
-            Permitir acceso a ubicación
-          </Text>
+          <Text style={styles.buttonText}>Permitir acceso a ubicación</Text>
         </TouchableOpacity>
       </View>
     );
@@ -170,14 +164,19 @@ const App: React.FC = () => {
       }
     : undefined;
 
-
-
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Riconsitos</Text>
 
       {location && mapRegion ? (
-        <MapView style={styles.map} region={mapRegion} showsUserLocation>
+        <MapView
+          style={styles.map}
+          region={mapRegion}
+          showsUserLocation
+        >
+          {/* Estilos del mapa */}
+
+          {/* Estilos de los marcadores */}
           {places.map((place) => (
             <Marker
               key={place.place_id}
@@ -231,8 +230,8 @@ const App: React.FC = () => {
           ListEmptyComponent={
             <View style={styles.emptyList}>
               <Text style={styles.emptyListText}>
-                {placesLoading 
-                  ? "Buscando lugares..." 
+                {placesLoading
+                  ? "Buscando lugares..."
                   : "No se encontraron lugares cercanos"}
               </Text>
             </View>
@@ -392,46 +391,46 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
   },
   loadingText: {
     marginTop: 10,
     fontSize: 16,
-    color: '#666',
+    color: "#666",
   },
   errorContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   retryButton: {
-    backgroundColor: '#4285F4',
+    backgroundColor: "#4285F4",
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 5,
   },
   listHeader: {
     padding: 10,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: "#e0e0e0",
   },
   listHeaderText: {
     fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
+    color: "#666",
+    textAlign: "center",
   },
   emptyList: {
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   emptyListText: {
     fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
+    color: "#666",
+    textAlign: "center",
   },
 });
