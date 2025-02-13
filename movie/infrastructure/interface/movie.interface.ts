@@ -9,3 +9,14 @@ export interface Movie {
   video: boolean;
   adult: boolean;
 }
+
+export interface CompleteMovie extends Movie {
+  genres: string[];
+  budget: number;
+  duration: number;
+  originalTitle: string;
+  productionCompanies: string[];
+  productionCountries: string[];
+  homePage: string;
+  revenue: number;
+}
