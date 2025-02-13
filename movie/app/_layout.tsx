@@ -1,14 +1,18 @@
-import { Stack } from "expo-router";
 import "../global.css";
-import { View, Text } from "react-native";
-import { nowPlayingAction } from "@/core/actions/movies/now-playing.action";
+import React from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Stack } from "expo-router";
+
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
-  nowPlayingAction();
-
   return (
-    <View>
-      <Text className="text-2xl text-purple-500">Root Layout</Text>
-    </View>
+    <QueryClientProvider client={queryClient}>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
+    </QueryClientProvider>
   );
 }
