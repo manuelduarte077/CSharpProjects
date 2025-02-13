@@ -7,14 +7,14 @@ export default function HomeScreen() {
   return (
     <SafeAreaView>
       <View className="px-10">
-        <CustomButton className="mb-2" color="primary" onPress={() => router.push("/products")}>
+        <CustomButton className="mb-2" color="primary" onPress={() => router.push("/tabs/(stack)/products")}>
           Products
         </CustomButton>
 
-        <CustomButton className="mb-2" color="secondary" onPress={() => router.push("/profile")}>
+        <CustomButton className="mb-2" color="secondary" onPress={() => router.push("/tabs/(stack)/profile")}>
           Profile
         </CustomButton>
-        <CustomButton className="mb-2" variant="outlined" color="tertiary" onPress={() => router.push("/settings")}>
+        <CustomButton className="mb-2" variant="outlined" color="tertiary" onPress={() => router.push("/tabs/(stack)/settings")}>
           Settings
         </CustomButton>
       </View>
