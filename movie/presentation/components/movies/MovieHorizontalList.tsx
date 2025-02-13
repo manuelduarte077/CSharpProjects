@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React, { useEffect, useRef } from "react";
 import { Movie } from "@/infrastructure/interface/movie.interface";
-import MoviePoster from "../components/MoviePoster";
+import MoviePoster from "./MoviePoster";
 
 interface Props {
   title: string;

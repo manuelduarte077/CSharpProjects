@@ -2,8 +2,8 @@ import { View, Text, ActivityIndicator, ScrollView } from "react-native";
 import React from "react";
 import { useMovies } from "@/presentation/hooks/useMovies";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import MainSlideshow from "@/presentation/movies/components/MainSlideshow";
-import MovieHorizontalList from "@/presentation/movies/popular/MovieHorizontalList";
+import MainSlideshow from "@/presentation/components/movies/MainSlideshow";
+import MovieHorizontalList from "@/presentation/components/movies/MovieHorizontalList";
 
 export default function HomeScreen() {
   const safeArea = useSafeAreaInsets();
