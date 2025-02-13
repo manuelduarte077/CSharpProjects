@@ -36,8 +36,9 @@ export default function HomeScreen() {
         />
         <MovieHorizontalList
           title="Mejor valoradas"
-          movies={topRatedMoviesQuery.data ?? []}
+          movies={topRatedMoviesQuery.data?.pages.flat() ?? []}
           className="mb-5"
+          loadNextPage={topRatedMoviesQuery.fetchNextPage}
         />
         <MovieHorizontalList
           title="Próximos"
