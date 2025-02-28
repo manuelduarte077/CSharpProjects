@@ -24,7 +24,7 @@ const MovieHorizontalList = ({
   className,
   loadNextPage,
 }: Props) => {
-  const isLoading = useRef(false); // to prevent multiple requests
+  const isLoading = useRef(false);
 
   // infinite scroll effect
   useEffect(() => {
@@ -53,6 +53,7 @@ const MovieHorizontalList = ({
       {title && <Text className="text-3xl font-light px-4 mb-2">{title}</Text>}
 
       <FlatList
+      className="mb-5"
         horizontal
         showsHorizontalScrollIndicator={false}
         data={movies}

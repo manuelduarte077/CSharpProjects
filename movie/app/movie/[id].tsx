@@ -4,11 +4,13 @@ import { useLocalSearchParams } from "expo-router";
 import { useMovie } from "@/presentation/hooks/useMovie";
 import MovieHeader from "@/presentation/components/movie/MovieHeader";
 import MovieDescription from "@/presentation/components/movie/MovieDescription";
+import MovieCast from "@/presentation/components/movie/MovieCast";
 
 const MovieDetail = () => {
   const { id } = useLocalSearchParams();
 
-  const { movieQuery } = useMovie(+id);
+  const { movieQuery, castQuery } = useMovie(+id);
+
   if (movieQuery.isLoading || !movieQuery.data) {
     return (
       <View className="flex-1 justify-center items-center">
@@ -27,6 +29,12 @@ const MovieDetail = () => {
       />
 
       <MovieDescription movie={movieQuery.data} />
+
+      {/* Movie Cast */}
+      <MovieCast 
+        cast={castQuery.data ?? []} 
+      />
+
     </ScrollView>
   );
 };
