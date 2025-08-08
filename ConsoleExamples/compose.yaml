@@ -1,0 +1,7 @@
+﻿services:
+  consoleexamples:
+    image: consoleexamples
+    build:
+      context: .
+      dockerfile: ConsoleExamples/Dockerfile
+
