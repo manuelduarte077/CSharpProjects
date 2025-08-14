@@ -1,0 +1,10 @@
+@model IEnumerable<CarDto>
+
+<h1>List of cars</h1>
+
+<ul>
+    @foreach (var car in Model)
+    {
+        <li>@car.MakeName</li>
+    }
+</ul>
